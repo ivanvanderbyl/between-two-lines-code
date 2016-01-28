@@ -1,7 +1,6 @@
-# Between-two-lines-ember-conf
+# between-two-lines
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+A quick example of rendering weather data in Ember using D3 verison 4 and Forecast.io API.
 
 ## Prerequisites
 
@@ -22,7 +21,7 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-* `ember server`
+* `ember server --proxy=https://api.forecast.io/`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 
 ### Code Generators
