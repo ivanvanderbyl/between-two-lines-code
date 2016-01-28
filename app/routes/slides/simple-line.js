@@ -1,24 +1,23 @@
 import Ember from 'ember';
 
+const DARKSKYS_API_URL = "/forecast/b21536c6540c0bf278db7fa381df0012/-37.8136,144.9631?units=si&exclude=currently";
+// const API_BASE = "https://api.forecast.io/";
+
 export default Ember.Route.extend({
+  ajax: Ember.inject.service(),
 
   model() {
-    const pointCount = 120;
-    const startTime = (new Date()).valueOf();
-
-    let i = 0;
-
-    let values = [];
-
-    while(++i < pointCount) {
-      values.push([startTime + i * 1e3, Math.random() * 100]);
-    }
-
-    return values;
+    return this.get('ajax').request(DARKSKYS_API_URL);
   },
 
-  setupController(controller, values) {
+  setupController(controller, weatherData) {
+    let values = this.normalizeHourlyWeatherData(weatherData);
     controller.setProperties({ values });
+  },
+
+  normalizeHourlyWeatherData(weatherData) {
+    const points = weatherData.hourly.data;
+    return points.map(({time, apparentTemperature, temperature}) => [time * 1e3, temperature, apparentTemperature]);
   }
 
 });

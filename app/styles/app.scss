@@ -1,0 +1,27 @@
+@import "bourbon";
+
+$grey_6: #bbbbbb;
+
+svg {
+  font: 10px sans-serif;
+
+  text {
+    fill: $grey_6;
+  }
+
+  path {
+    shape-rendering: geometricPrecision;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: $grey_6;
+    shape-rendering: crispEdges;
+  }
+}
+
+.temperature-graphic {
+  width: 100%;
+  height: 100%;
+}

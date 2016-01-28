@@ -1,13 +1,13 @@
 import Ember from 'ember';
 import ScheduledDraw from '../../mixins/scheduled-draw';
-import { line, curveStepAfter } from 'd3-shape';
+import { line, curveNatural } from 'd3-shape';
 
 function lineFn(xScale, yScale) {
   return line()
     .x((d) => xScale(d[0]))
     .y((d) => yScale(d[1]))
     .defined((d) => d && d[1] > 0 && !isNaN(d[0]))
-    .curve(curveStepAfter);
+    .curve(curveNatural);
 }
 
 const SimpleLineComponent = Ember.Component.extend(ScheduledDraw, {

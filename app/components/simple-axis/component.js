@@ -73,7 +73,7 @@ export default Ember.Component.extend({
       .attr('x', 8)
       .attr('y', 8);
 
-    this.groupElement.selectAll('.domain').remove();
+    // this.groupElement.selectAll('.domain').remove();
   },
 
   createAxis(orient, scale) {
