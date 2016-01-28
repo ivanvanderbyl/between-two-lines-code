@@ -3,40 +3,6 @@ import { scaleLinear } from 'd3-scale';
 import { extent } from 'd3-array';
 const { computed } = Ember;
 
-function computedExtent(...props) {
-  let accessor = (d) => d;
-  if (Ember.typeOf(props[props.length-1]) === 'function') {
-    accessor = props.pop();
-  }
-
-  let dependendentProps = props.filter((p) => typeof(p) === 'string');
-  return computed(dependendentProps, {
-    get() {
-      const deps = props.map((prop) => {
-        if (typeof prop === 'string') {
-          return this.get(prop);
-        }else{
-          return prop;
-        }
-      });
-
-      if (props.length === 1) {
-        return extent(deps[0], accessor);
-      }else{
-        return extent(deps, accessor);
-      }
-    }
-  });
-}
-
-function computedScale(scalerFn, domain, range) {
-  return computed(domain, range, {
-    get() {
-      return scalerFn().domain(this.get(domain)).range(this.get(range));
-    }
-  });
-}
-
 export default Ember.Component.extend({
   tagName: 'svg',
   classNames: ['sparkline'],
@@ -48,12 +14,43 @@ export default Ember.Component.extend({
 
   values: [],
 
-  xRange: computedExtent(0, 'width'),
-  xDomain: computedExtent('values', (d) => d[0]),
-  xScale: computedScale(scaleLinear, 'xDomain', 'xRange'),
+  xRange: computed('width', {
+    get() {
+      return [0, this.get('width')];
+    }
+  }),
 
-  yRange: computedExtent('height', 0),
-  yDomain: computedExtent('values', (d) => d[1]),
-  yScale: computedScale(scaleLinear, 'yDomain', 'yRange'),
+  xDomain: computed('values.[]', {
+    get() {
+      const values = this.get('values');
+      return extent(values, (d) => d[0]);
+    }
+  }),
 
+  xScale: computed('xDomain', 'xRange', {
+    get() {
+      const { xDomain, xRange } = this.getProperties('xDomain', 'xRange');
+      return scaleLinear().domain(xDomain).range(xRange);
+    }
+  }),
+
+  yRange: computed('height', {
+    get() {
+      return [this.get('height'), 0];
+    }
+  }),
+
+  yDomain: computed('values.[]', {
+    get() {
+      const values = this.get('values');
+      return extent(values, (d) => d[1]);
+    }
+  }),
+
+  yScale: computed('yDomain', 'yRange', {
+    get() {
+      const { yDomain, yRange } = this.getProperties('yDomain', 'yRange');
+      return scaleLinear().domain(yDomain).range(yRange);
+    }
+  }),
 });
