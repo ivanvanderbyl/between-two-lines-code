@@ -10,9 +10,13 @@ function lineFn(xScale, yScale) {
     .curve(curveStepAfter);
 }
 
-export default Ember.Component.extend(ScheduledDraw, {
+const SimpleLineComponent = Ember.Component.extend(ScheduledDraw, {
   classNames: ['simpe-line'],
   tagName: 'g',
+
+  xScale: null,
+
+  ySCale: null,
 
   /**
    * Values to render on the line.
@@ -36,9 +40,17 @@ export default Ember.Component.extend(ScheduledDraw, {
    */
   strokeWidth: 2,
 
+  // Positioning
+  top: 0,
+  left: 0,
+
   drawLine() {
     const { values, color, strokeWidth, xScale, yScale }
       = this.getProperties('values', 'color', 'strokeWidth', 'xScale', 'yScale');
+
+    const { top, left } = this.getProperties('top', 'left');
+
+    this.groupElement.attr('transform', `translate(${left}, ${top})`);
 
     const line = lineFn(xScale, yScale);
     const lineJoin = this.groupElement.selectAll('path.line')
@@ -55,3 +67,9 @@ export default Ember.Component.extend(ScheduledDraw, {
   }
 
 });
+
+SimpleLineComponent.reopenClass({
+  positionalParams: ['values', 'xScale', 'yScale']
+});
+
+export default SimpleLineComponent;
