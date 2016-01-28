@@ -17,6 +17,11 @@ export default Ember.Component.extend(Margin, Dimensions, {
   width: 1024,
   height: 400,
 
+  /**
+   * Represents values for the line.
+   *
+   * @type {Array[Array[2]]}
+   */
   values: [],
 
   margin: {
